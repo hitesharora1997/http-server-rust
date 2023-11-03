@@ -6,7 +6,7 @@ fn main() {
     let _head = Method::HEAD;
     let _connect = Method::CONNECT;
     let _delete = Method::DELETE(100);
-    let server = Server::new(String::from("127.0.0.1:8080").to_string());
+    let server = server::Server::new(String::from("127.0.0.1:8080").to_string());
 
     // dbg!(server);
 
@@ -19,27 +19,45 @@ fn main() {
     // let string_borrow: &str = &Server { addr: val };
 }
 
-#[derive(Debug)]
-struct Server {
-    addr: String,
-}
+mod server {
 
-impl Server {
-    fn new(addr: String) -> Self {
-        Self { addr: addr }
+    #[derive(Debug)]
+    pub struct Server {
+        addr: String,
     }
 
-    fn run(self) {
-        println!("Running the server on {}", self.addr);
+    impl Server {
+        pub fn new(addr: String) -> Self {
+            Self { addr: addr }
+        }
+
+        pub fn run(self) {
+            println!("Running the server on {}", self.addr);
+        }
     }
 }
+
 // #[derive(Debug)]
+// struct Server {
+//     addr: String,
+// }
+
+// impl Server {
+//     fn new(addr: String) -> Self {
+//         Self { addr: addr }
+//     }
+
+//     fn run(self) {
+//         println!("Running the server on {}", self.addr);
+//     }
+// }
+#[derive(Debug)]
 struct Request {
     path: String,
     query_string: Option<String>,
     method: Method,
 }
-// #[derive(Debug)]
+#[derive(Debug)]
 enum Method {
     GET(String),
     POST,
