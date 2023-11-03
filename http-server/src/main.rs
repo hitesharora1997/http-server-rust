@@ -1,6 +1,8 @@
 use http::request::Request;
 use server::Server;
 
+mod server;
+
 fn main() {
     let _get = http::method::Method::GET("hello".to_string());
     // let _post = Method::POST;
@@ -20,24 +22,6 @@ fn main() {
     // let j: &str = &s;
 
     // let string_borrow: &str = &Server { addr: val };
-}
-
-mod server {
-
-    #[derive(Debug)]
-    pub struct Server {
-        addr: String,
-    }
-
-    impl Server {
-        pub fn new(addr: String) -> Self {
-            Self { addr: addr }
-        }
-
-        pub fn run(self) {
-            println!("Running the server on {}", self.addr);
-        }
-    }
 }
 
 mod http {
