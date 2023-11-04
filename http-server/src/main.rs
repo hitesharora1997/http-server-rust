@@ -1,10 +1,6 @@
-use http::request::Request;
-use server::Server;
-
 mod server;
-
 fn main() {
-    let _get = http::method::Method::GET("hello".to_string());
+    // let _get = Method::GET("hello".to_string());
     // let _post = Method::POST;
     // let _patch = Method::PATCH;
     // let _put = Method::PUT;
@@ -22,32 +18,4 @@ fn main() {
     // let j: &str = &s;
 
     // let string_borrow: &str = &Server { addr: val };
-}
-
-mod http {
-
-    pub mod request {
-        // #[derive(Debug)]
-        pub struct Request {
-            path: String,
-            query_string: Option<String>,
-            method: super::method::Method,
-        }
-    }
-
-    pub mod method {
-
-        // #[derive(Debug)]
-        pub enum Method {
-            GET(String),
-            POST,
-            PUT,
-            DELETE(u64),
-            CONNECT,
-            OPTIONS,
-            HEAD,
-            TRACE,
-            PATCH,
-        }
-    }
 }
