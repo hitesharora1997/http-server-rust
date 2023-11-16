@@ -20,7 +20,13 @@ impl TryFrom<&[u8]> for Request {
         let request = str::from_utf8(buf)?;
 
         let (method, request) = get_next_word(request).ok_or(ParseError::InvalidRequestLine)?;
+        let (path, request) = get_next_word(request).ok_or(ParseError::InvalidRequestLine)?;
 
+        let (protocol, _) = get_next_word(request).ok_or(ParseError::InvalidRequestLine)?;
+
+        if protocol != "HTTP/1.1" {
+            return Err(ParseError::InvalidProtocol);
+        }
         unimplemented!()
     }
 }
@@ -30,7 +36,7 @@ fn get_next_word(request: &str) -> Option<(&str, &str)> {
 
     for (i, c) in request.chars().enumerate() {
         println!("c: {} and i: {}", c, i);
-        if c == ' ' {
+        if c == ' ' || c == '\r' {
             return Some((&request[..i], &request[i + 1..]));
         }
     }
