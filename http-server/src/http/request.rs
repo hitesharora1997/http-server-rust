@@ -8,8 +8,8 @@ use std::str;
 use std::str::Utf8Error;
 #[derive(Debug)]
 pub struct Request {
-    path: String,
-    query_string: Option<String>,
+    path: &str,
+    query_string: Option<&str>,
     method: Method,
 }
 
@@ -32,12 +32,12 @@ impl TryFrom<&[u8]> for Request {
 
         let mut query_string = None;
         if let Some(i) = path.find('?') {
-            query_string = Some(path[i + 1..].to_string());
+            query_string = Some(&path[i + 1..]);
             path = &path[..i];
         }
 
         Ok(Self {
-            path: path.to_string(),
+            path: path,
             query_string,
             method,
         })
