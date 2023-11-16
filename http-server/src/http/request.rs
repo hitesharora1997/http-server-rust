@@ -20,6 +20,18 @@ impl TryFrom<&[u8]> for Request {
     }
 }
 
+fn get_next_word(request: &str) -> Option<(&str, &str)> {
+    let iter = request.chars();
+
+    for (i, c) in request.chars().enumerate() {
+        println!("c: {} and i: {}", c, i);
+        if c == ' ' {
+            return Some((&request[..i], &request[i + 1..]));
+        }
+    }
+    None
+}
+
 // Custom type of Err
 pub enum ParseError {
     InvalidRequestLine,
