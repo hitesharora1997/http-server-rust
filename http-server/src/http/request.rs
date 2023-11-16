@@ -1,7 +1,7 @@
 use super::method::Method;
+use std::convert::TryFrom;
 use std::error::Error;
-use std::fmt::{write, Debug, Display, Formatter, Result as FmtResult};
-use std::{convert::TryFrom, error};
+use std::fmt::{Debug, Display, Formatter, Result as FmtResult};
 #[derive(Debug)]
 pub struct Request {
     path: String,
@@ -29,7 +29,7 @@ impl ParseError {
     fn message(&self) -> &str {
         match self {
             Self::InvalidEncoding => "inv request",
-            Self::InvalidEncoding => "inv encoding",
+            Self::InvalidRequestLine => "inv Request",
             Self::InvalidProtocol => "inv Protocol",
             Self::InvalidMethod => "inv Method",
             _ => "unkown error",
@@ -37,6 +37,7 @@ impl ParseError {
     }
 }
 
+impl Error for ParseError {}
 impl Display for ParseError {
     fn fmt(&self, f: &mut Formatter) -> FmtResult {
         write!(f, "{}", self.message())
