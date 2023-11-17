@@ -50,7 +50,7 @@ fn get_next_word(request: &str) -> Option<(&str, &str)> {
     let _iter = request.chars();
 
     for (i, c) in request.chars().enumerate() {
-        println!("c: {} and i: {}", c, i);
+        // println!("c: {} and i: {}", c, i);
         if c == ' ' || c == '\r' {
             return Some((&request[..i], &request[i + 1..]));
         }
