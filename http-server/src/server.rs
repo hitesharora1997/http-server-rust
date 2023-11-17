@@ -31,7 +31,7 @@ impl Server {
                                 Ok(request) => {
                                     dbg!(request);
                                     let response = Response::new(
-                                        StatusCode::NotFound,
+                                        StatusCode::Ok,
                                         Some("<h1> nice work</h1>".to_string()),
                                     );
                                     write!(stream, "{:?}", response);
