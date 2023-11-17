@@ -1,7 +1,5 @@
+use super::StatusCode;
 use std::fmt::{Display, Formatter, Result as FmtResult};
-
-#[derive(Debug)]
-pub enum StatusCode {}
 
 #[derive(Debug)]
 pub struct Response {
@@ -22,6 +20,12 @@ impl Display for Response {
             None => "",
         };
 
-        write!(f, "HTTP/1.1 \r\n\r\n {:?}", self.status_code,)
+        write!(
+            f,
+            "HTTP/1.1 \r\n\r\n {:?} {} {} ",
+            self.status_code,
+            self.status_code.reason_phrase(),
+            body,
+        )
     }
 }

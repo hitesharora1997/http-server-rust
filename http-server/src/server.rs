@@ -1,4 +1,5 @@
-use crate::http::{request, Request};
+use crate::http::{Request, Response, StatusCode};
+use std::convert::TryFrom;
 use std::io::{Read, Write};
 use std::net::TcpListener;
 
@@ -29,7 +30,8 @@ impl Server {
                             match Request::try_from(&buf[..]) {
                                 Ok(request) => {
                                     dbg!(request);
-                                    write!(stream, "HTTP/1.1 404 Not Found\r\n\r\n");
+                                    let response = Response::new(StatusCode::NotFound, None);
+                                    write!(stream, "{:?}", response);
                                 }
                                 Err(e) => println!("Failed to parse a request: {}", e),
                             }
