@@ -20,3 +20,31 @@ impl<'buf> QuerryString<'buf> {
         self.data.get(key)
     }
 }
+
+// This conversion can't fail
+impl<'buf> From<&'buf str> for QuerryString<'buf> {
+    fn from(s: &'buf str) -> Self {
+        let mut data = HashMap::new();
+
+        for sub_str in s.split('&') {
+            let mut key = sub_str;
+            let mut val = "";
+
+            if let Some(i) = sub_str.find('=') {
+                key = &sub_str[..i];
+                val = &sub_str[i + 1..];
+            }
+
+            data.entry(key)
+                .and_modify(|existing| match existing {
+                    Value::Single(prev_value) => {
+                        *existing = Value::Multiple(vec![prev_value, val]);
+                    }
+                    Value::Multiple(vec) => vec.push(val),
+                })
+                .or_insert(Value::Single(val));
+        }
+
+        QuerryString { data }
+    }
+}
