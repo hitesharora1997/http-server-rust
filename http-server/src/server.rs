@@ -30,7 +30,10 @@ impl Server {
                             match Request::try_from(&buf[..]) {
                                 Ok(request) => {
                                     dbg!(request);
-                                    let response = Response::new(StatusCode::NotFound, None);
+                                    let response = Response::new(
+                                        StatusCode::NotFound,
+                                        Some("<h1> nice work</h1>".to_string()),
+                                    );
                                     write!(stream, "{:?}", response);
                                 }
                                 Err(e) => println!("Failed to parse a request: {}", e),
