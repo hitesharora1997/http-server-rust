@@ -9,7 +9,7 @@ pub struct Response {
 
 impl Response {
     pub fn new(status_code: StatusCode, body: Option<String>) {
-        unimplemented!()
+        Response { status_code, body };
     }
 }
 
