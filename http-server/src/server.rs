@@ -27,7 +27,10 @@ impl Server {
                             println!("Recieved a request: {}", String::from_utf8_lossy(&buf));
 
                             match Request::try_from(&buf[..]) {
-                                Ok(request) => {}
+                                Ok(request) => {
+                                    dbg!(request);
+                                    write!(stream, "HTTP/1.1 404 Not Found\r\n\r\n");
+                                }
                                 Err(e) => println!("Failed to parse a request: {}", e),
                             }
                         }
