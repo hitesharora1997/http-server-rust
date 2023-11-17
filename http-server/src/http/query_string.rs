@@ -6,23 +6,25 @@ use std::collections::HashMap;
 // d=
 // e===
 
-pub struct QuerryString<'buf> {
+#[derive(Debug)]
+pub struct QueryString<'buf> {
     data: HashMap<&'buf str, Value<'buf>>,
 }
 
+#[derive(Debug)]
 pub enum Value<'buf> {
     Single(&'buf str),
     Multiple(Vec<&'buf str>),
 }
 
-impl<'buf> QuerryString<'buf> {
+impl<'buf> QueryString<'buf> {
     pub fn get(&self, key: &str) -> Option<&Value> {
         self.data.get(key)
     }
 }
 
 // This conversion can't fail
-impl<'buf> From<&'buf str> for QuerryString<'buf> {
+impl<'buf> From<&'buf str> for QueryString<'buf> {
     fn from(s: &'buf str) -> Self {
         let mut data = HashMap::new();
 
@@ -45,6 +47,6 @@ impl<'buf> From<&'buf str> for QuerryString<'buf> {
                 .or_insert(Value::Single(val));
         }
 
-        QuerryString { data }
+        QueryString { data }
     }
 }
