@@ -1,7 +1,17 @@
-use crate::http::{response, Request, Response, StatusCode};
+use crate::http::{request, response, ParseError, Request, Response, StatusCode};
+use crate::website_handler::WebsiteHandler;
 use std::convert::TryFrom;
 use std::io::{Read, Write};
 use std::net::TcpListener;
+
+pub trait Handler {
+    fn handle_request(&mut self, request: &Request) -> Response;
+
+    fn handle_bad_request(&mut self, e: &ParseError) -> Response {
+        println!("Failed to parse request: {}", e);
+        Response::new(StatusCode::BadRequest, None)
+    }
+}
 
 #[derive(Debug)]
 pub struct Server {
@@ -13,7 +23,7 @@ impl Server {
         Self { addr: addr }
     }
 
-    pub fn run(self) {
+    pub fn run(self, mut handler: impl Handler) {
         println!("Running the server on {}", self.addr);
 
         // Recoverable error
@@ -28,17 +38,9 @@ impl Server {
                             println!("Recieved a request: {}", String::from_utf8_lossy(&buf));
 
                             let response = match Request::try_from(&buf[..]) {
-                                Ok(request) => {
-                                    dbg!(request);
-                                    Response::new(
-                                        StatusCode::Ok,
-                                        Some("<h1> nice work</h1>".to_string()),
-                                    )
-                                }
-                                Err(e) => {
-                                    println!("Failed to parse a request: {}", e);
-                                    Response::new(StatusCode::BadRequest, None)
-                                }
+                                Ok(request) => handler.handle_request(&request),
+
+                                Err(e) => handler.handle_bad_request(&e),
                             };
                             if let Err(e) = response.send(&mut stream) {
                                 println!("Failed to send response: {}", e);
