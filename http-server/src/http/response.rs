@@ -16,7 +16,7 @@ impl Response {
         Response { status_code, body }
     }
 
-    // dyn is dynamic
+    // dyn is dynamic dispatch
     pub fn send(&self, stream: &mut dyn Write) -> IoResult<()> {
         let body = match &self.body {
             Some(b) => b,
