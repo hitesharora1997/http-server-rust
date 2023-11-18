@@ -16,7 +16,8 @@ impl Response {
         Response { status_code, body }
     }
 
-    pub fn send(&self, stream: &mut TcpStream) -> IoResult<()> {
+    // dyn is dynamic
+    pub fn send(&self, stream: &mut dyn Write) -> IoResult<()> {
         let body = match &self.body {
             Some(b) => b,
             None => "",
